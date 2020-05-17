@@ -62,7 +62,7 @@ class PageScrapper:
         for item in range(len(parameters)):
 
             if parameters[item].find('div',{'class': 'dfp'}):
-                break
+                continue
             else:
                 parameter_title = parameters[item].find('span')
                 parameter_value = parameters[item].find('b',{'class':'parameters__value'})
@@ -71,6 +71,7 @@ class PageScrapper:
                     data[slugify(parameter_title.get_text())] = parameter_value.get_text()
                 
                 if parameters[item].find('span') is not None:
+                    
                     if (parameters[item].find('span').get_text() == "Dostępność od"):
                         data['data_dostepne'] = parameters[item].find('b',{'class':'parameters__value'}).get_text().strip()
                         #print(data['data_dostepne'])
@@ -139,12 +140,12 @@ class PageScrapper:
                     data['typ_nieruchomosci'] = re.findall('mieszkania|domy', self.url)[0]
                     all_data.append(data)
                     print(data)
-                    time.sleep(2)
+                    time.sleep(1)
             return all_data
                     
 
     def save_json(self):
-        with open('gratkapl_mieszkania_gdansk.json', 'w') as file:
+        with open('gratkapl_domy_sopot.json', 'w') as file:
             json.dump(self.find_advertisements(), file)
 
 
@@ -155,7 +156,7 @@ URL3 = 'https://gratka.pl/nieruchomosci/mieszkania/sopot/sprzedaz?page=1&cena-ca
 URL4 = 'https://gratka.pl/nieruchomosci/domy/gdansk/sprzedaz?page=1&cena-calkowita:min=100000'
 URL5 = 'https://gratka.pl/nieruchomosci/domy/gdynia/sprzedaz?page=1&cena-calkowita:min=100000'
 URL6 = 'https://gratka.pl/nieruchomosci/domy/sopot/sprzedaz?page=1&cena-calkowita:min=100000'
-scraper = PageScrapper(URL1)
+scraper = PageScrapper(URL6)
 #scraper.find_advertisements()
 scraper.save_json()
 
